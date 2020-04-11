@@ -3,7 +3,7 @@ import { ActionCable } from 'react-actioncable-provider';
 import { API_ROOT } from '../constants';
 import NewConversationForm from './NewConversationForm';
 import MessagesArea from './MessagesArea';
-import Cable from './Cable';
+import Cable from './Cables';
 
 class ConversationsList extends React.Component {
   state = {
@@ -30,8 +30,8 @@ class ConversationsList extends React.Component {
 
   handleReceivedMessage = response => {
     const { message } = response;
-    const conversations = {...this.state.conversations};
-    const conversation = conversation.find(
+    const conversations = [...this.state.conversations];
+    const conversation = conversations.find(
       conversation => conversation.id === message.conversation_id
     );
     conversation.messages = [...conversation.messages, message];
@@ -42,7 +42,7 @@ class ConversationsList extends React.Component {
     const { conversations, activeConversation } = this.state;
     return (
       <div className="conversationsList">
-        <ActionCable 
+        <ActionCable
           channel={{ channel: 'ConversationsChannel' }}
           onReceived={this.handleReceivedConversation}
         />
@@ -51,7 +51,7 @@ class ConversationsList extends React.Component {
             conversations={conversations}
             handleReceivedMessage={this.handleReceivedMessage}
           />
-        ) : null }
+        ) : null}
         <h2>Conversations</h2>
         <ul>{mapConversations(conversations, this.handleClick)}</ul>
         <NewConversationForm />
@@ -62,7 +62,7 @@ class ConversationsList extends React.Component {
               activeConversation
             )}
           />
-        ) : null }
+        ) : null}
       </div>
     );
   };
@@ -70,7 +70,7 @@ class ConversationsList extends React.Component {
 
 export default ConversationsList;
 
-//helpers
+// helpers
 
 const findActiveConversation = (conversations, activeConversation) => {
   return conversations.find(
